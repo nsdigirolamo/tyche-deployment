@@ -1,0 +1,23 @@
+
+
+services:
+  db:
+    image: "nsdigirolamo/tyche:db"
+    container_name: "tyche-db"
+    environment:
+      POSTGRES_PASSWORD: docker
+      DATABASE_URL: postgres://postgres:docker@db:5432/postgres
+  api:
+    image: "nsdigirolamo/tyche:api"
+    container_name: "tyche-api"
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_PASSWORD: docker
+      DATABASE_URL: postgres://postgres:docker@db:5432/postgres
+      JWT_SECRET: c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2
+  app:
+    image: "nsdigirolamo/tyche:app"
+    container_name: "tyche-app"
+    ports:
+      - "80:80"
