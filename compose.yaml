@@ -1,14 +1,13 @@
-
-
 services:
   db:
     image: "nsdigirolamo/tyche:db"
     container_name: "tyche-db"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+      POSTGRES_USER_FILE: /run/secrets/postgres_user_file
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password_file
+    secrets:
+      - postgres_user_file
+      - postgres_password_file
     volumes:
       - postgres-volume:/var/lib/postgresql/data
   api:
@@ -17,13 +16,27 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_PASSWORD: postgres
-      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
-      JWT_SECRET: c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2
+      ENVIRONMENT_TYPE: production
+      DATABASE_URL_FILE: /run/secrets/database_url_file
+      JWT_SECRET_FILE: /run/secrets/jwt_secret_file
+    secrets:
+      - database_url_file
+      - jwt_secret_file
   app:
     image: "nsdigirolamo/tyche:app"
     container_name: "tyche-app"
     ports:
       - "80:80"
+
+secrets:
+  postgres_user_file:
+    file: postgres_user.txt
+  postgres_password_file:
+    file: postgres_password.txt
+  database_url_file:
+    file: database_url.txt
+  jwt_secret_file:
+    file: jwt_secret.txt
+
 volumes:
   postgres-volume:
