@@ -17,6 +17,7 @@ services:
       - "8000:8000"
     environment:
       ENVIRONMENT_TYPE: production
+      ALLOWED_ORIGIN: http://www.tyche.social
       DATABASE_URL_FILE: /run/secrets/database_url_file
       JWT_SECRET_FILE: /run/secrets/jwt_secret_file
     secrets:
@@ -27,6 +28,8 @@ services:
     container_name: "tyche-app"
     ports:
       - "80:80"
+    environment:
+      NODE_ENV: production
 
 secrets:
   postgres_user_file:
