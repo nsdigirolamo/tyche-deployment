@@ -3,3 +3,6 @@ up:
 
 down:
 	sudo docker compose down
+
+prune:
+	sudo docker system prune --all
