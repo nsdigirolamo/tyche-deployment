@@ -1,7 +1,15 @@
 services:
+  nginx:
+    image: nginx:latest
+    container_name: "nginx"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+      - "443:443"
   db:
     image: "nsdigirolamo/tyche:db"
-    container_name: "tyche-db"
+    container_name: "db"
     environment:
       POSTGRES_USER_FILE: /run/secrets/postgres_user_file
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password_file
@@ -12,9 +20,9 @@ services:
       - postgres-volume:/var/lib/postgresql/data
   api:
     image: "nsdigirolamo/tyche:api"
-    container_name: "tyche-api"
+    container_name: "api"
     ports:
-      - "8000:8000"
+      - "8000" # Expose to Docker network, not to host machine.
     environment:
       ENVIRONMENT_TYPE: production
       ALLOWED_ORIGIN: http://www.tyche.social
@@ -25,9 +33,9 @@ services:
       - jwt_secret_file
   app:
     image: "nsdigirolamo/tyche:app"
-    container_name: "tyche-app"
+    container_name: "app"
     ports:
-      - "80:80"
+      - "80" # Expose to Docker network, not to host machine.
     environment:
       NODE_ENV: production
 
